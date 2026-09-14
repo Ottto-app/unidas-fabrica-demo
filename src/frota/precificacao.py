@@ -2,11 +2,11 @@
 
 Busca, para cada item a precificar, o valor correspondente na tabela de
 precos pelo par (codigo do item, classificacao). Itens sem correspondencia
-na tabela sao bloqueados com o motivo "SEM PRECO NA TABELA" -- nunca
+na tabela sao bloqueados com o motivo "SEM PREÇO NA TABELA" -- nunca
 recebem valor zero assumido.
 """
 
-MOTIVO_SEM_PRECO = "SEM PRECO NA TABELA"
+MOTIVO_SEM_PRECO = "SEM PREÇO NA TABELA"
 
 
 def precificar_itens(itens, tabela_precos):
