@@ -21,3 +21,31 @@ Conteúdo fictício. Simula o par Azure Boards + Azure Repos usando GitHub Issue
 pip install -r requirements.txt
 pytest -q
 ```
+
+## Motor de precificação (US-2, RN-03)
+
+Módulo `src/frota/precificacao.py`, função `precificar_itens(itens, tabela_precos)`.
+
+O que faz: para cada item a precificar (com `codigo_item` e `classificacao`), busca o valor
+correspondente na tabela de preços de reparo pelo par `(codigo_item, classificacao)`.
+- Se o par existe na tabela: o item recebe `status="PRECIFICADO"` e o campo `valor` com o valor exato da tabela.
+- Se o par não existe na tabela: o item recebe `status="SEM_PRECO"` (sem assumir valor zero) e é
+  adicionado à lista de bloqueios com `motivo="SEM PREÇO NA TABELA"`.
+
+Como usar:
+```python
+from frota.precificacao import precificar_itens
+
+itens = [{"codigo_item": "PARACHOQUE_TRASEIRO", "classificacao": "AVARIA", "status": "A_PRECIFICAR"}]
+tabela_precos = {("PARACHOQUE_TRASEIRO", "AVARIA"): 850.0}
+
+itens_precificados, bloqueios = precificar_itens(itens, tabela_precos)
+```
+
+Como testar:
+```bash
+pytest -q tests/test_precificacao.py
+```
+
+Fora do escopo desta história: manutenção/atualização da planilha de preços (processo do
+pós-venda) e aplicação da franquia (história de RN-04).

@@ -1,1 +1,1 @@
-"""Pacote de domínio da frota (laboratório)."""
+Pacote frota: modulos do motor de vistoria e precificacao de itens.
