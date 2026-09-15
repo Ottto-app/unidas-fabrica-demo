@@ -21,3 +21,32 @@ Conteúdo fictício. Simula o par Azure Boards + Azure Repos usando GitHub Issue
 pip install -r requirements.txt
 pytest -q
 ```
+
+## Classificação de itens da vistoria de devolução (US-4)
+
+Função que classifica cada item avaliado na vistoria de devolução segundo sua
+classificação de dano e a cobertura do contrato, determinando se o item entra
+ou não na cobrança antes das demais etapas de cálculo (precificação e
+franquia, tratadas em histórias futuras).
+
+Regras aplicadas:
+- RN-01: item `SEM_DANO` não gera cobrança (status `ISENTO`, valor `0`).
+- RN-02: item `DESGASTE_NATURAL` fica `ISENTO` quando o contrato tem cobertura
+  de desgaste natural; sem cobertura, é tratado como `LEVE` (status
+  `A_PRECIFICAR`, classificação efetiva `LEVE`).
+
+Como usar:
+```python
+from frota.classificacao_item import classificar_item
+
+classificar_item("SEM_DANO", cobertura_desgaste_natural=False)
+# {"status": "ISENTO", "valor": 0}
+
+classificar_item("DESGASTE_NATURAL", cobertura_desgaste_natural=False)
+# {"status": "A_PRECIFICAR", "classificacao_efetiva": "LEVE"}
+```
+
+Como testar:
+```bash
+pytest -q tests/test_classificacao_item.py
+```
