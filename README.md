@@ -21,3 +21,33 @@ Conteúdo fictício. Simula o par Azure Boards + Azure Repos usando GitHub Issue
 pip install -r requirements.txt
 pytest -q
 ```
+
+## US-5 — Motor: aplicar franquia contratual sobre a soma das avarias (RN-04)
+
+O que faz: dado um bloco de itens de avaria já precificados (saída da história
+de RN-03, tabela de preços) e a franquia de avarias do contrato, compara a
+soma dos valores de tabela com a franquia e cobra o menor valor entre os
+dois. O que exceder a franquia é absorvido pelo seguro e fica registrado na
+memória de cálculo com status `ABSORVIDO_SEGURO`, sem entrar no total
+cobrado. Os itens individuais mantêm seu valor de tabela original,
+independentemente do rateio da franquia.
+
+Como usar:
+```python
+from frota.franquia_avarias import ItemAvaria, aplicar_franquia_avarias
+
+itens = [
+    ItemAvaria(descricao="para-brisa trincado", valor_tabela=800.0),
+    ItemAvaria(descricao="farol quebrado", valor_tabela=200.0),
+]
+
+resultado = aplicar_franquia_avarias(itens, franquia=600.0)
+# resultado.valor_cobrado == 600.0
+# resultado.valor_absorvido_seguro == 400.0
+# resultado.status_excedente == "ABSORVIDO_SEGURO"
+```
+
+Como testar:
+```bash
+pytest -q tests/test_franquia_avarias.py
+```
